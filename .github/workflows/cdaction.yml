@@ -22,5 +22,5 @@ jobs:
         DOCKER_PASSWD: ${{ secrets.DOCKER_PASSWD }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWD
-        docker build . -t action-test/hello:1.0.0
-        docker push action-test/hello:1.0.0
+        docker build . -t sudockr/hellohelllo:1.0.0
+        docker push sudockr/hellohelllo:1.0.0
