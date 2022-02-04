@@ -1,0 +1,26 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Push
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWD: ${{ secrets.DOCKER_PASSWD }}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWD
+        docker build . -t action-test/hello:1.0.0
+        docker push action-test/hello:1.0.0
