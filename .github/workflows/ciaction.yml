@@ -23,3 +23,13 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+      
+    - name: Push
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWD: ${{ secrets.DOCKER_PASSWD }}
+      if: ${{ github.event.action }} == 'push'
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWD
+        docker build . -t action-test/hello:1.0.0
+        docker push action-test/hello:1.0.0
