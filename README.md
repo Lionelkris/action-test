@@ -1,2 +1,2 @@
 # action-test
-testing git actions
+testing git actions for randori
