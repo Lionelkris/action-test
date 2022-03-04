@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -15,25 +16,28 @@ func add(input string) (*float64, error) {
 	var number, add float64
 	var err error
 	numbers := strings.Split(input, ",")
-	fmt.Println(numbers)
-	fmt.Printf("Length of string is %v", len(numbers))
 	for _, numberString := range numbers {
 		if numberString == "" {
 			continue
 		}
-		if number, err = strconv.ParseFloat(numberString, 32); err != nil {
-			fmt.Println("Cannot convert string to float", err)
+		if number, err = strconv.ParseFloat(numberString, 64); err != nil {
 			return nil, err
 		}
-		fmt.Printf("Converted Number is %v\n", number)
-		//fmt.Printf("Add value is %v\n", add)
 		add = add + number
-		//fmt.Printf("Add value is %v\n", add)
+		if add < math.MaxFloat64/10000 {
+			add = math.Round(add*10000) / 10000
+		}
 	}
-	fmt.Printf("Add value is %v\n", add)
+	if checkForInfinity(add) {
+		fmt.Println("error from here")
+		return nil, fmt.Errorf("out of bound")
+	}
 	return &add, nil
 }
 
+func checkForInfinity(number float64) bool {
+	return math.IsInf(number, 0)
+}
 func main() {
 
 	greet := say_hello()
