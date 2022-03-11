@@ -120,3 +120,43 @@ func Test_add(t *testing.T) {
 		})
 	}
 }
+
+func Test_subtract(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		want    float64
+		wantErr bool
+	}{
+		{
+			name:  "2 valid numbers",
+			input: "40,20",
+			want:  20.0,
+		},
+		{
+			name:  "valid numbers with negative int",
+			input: "-40,20",
+			want:  -60.0,
+		},
+		{
+			name:  "3 valid numbers with negative ints",
+			input: "-40,20,-30",
+			want:  -30.0,
+		},
+		{
+			name:  "going beloew minFloat64",
+			input: "-40,20,-30",
+			want:  -30.0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := subtract(tt.input)
+			assert.Equal(t, err != nil, tt.wantErr)
+			if err == nil {
+				fmt.Printf("Value of *got is %v\n", *got)
+				assert.Equal(t, tt.want, *got, "these should be equal")
+			}
+		})
+	}
+}
