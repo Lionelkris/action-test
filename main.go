@@ -48,20 +48,8 @@ func subtract(input string) (*float64, error) {
 		return nil, err
 	}
 	sub = sub - *addResult
-	// for _, numberString := range numbers {
-	// 	if numberString == "" {
-	// 		continue
-	// 	}
-	// 	if number, err = strconv.ParseFloat(numberString, 64); err != nil {
-	// 		return nil, err
-	// 	}
-	// 	sub = sub - number
-	// 	if sub < math.MaxFloat64/10000 {
-	// 		sub = math.Round(sub*10000) / 10000
-	// 	}
-	// }
+
 	if checkForInfinity(sub) {
-		fmt.Println("error from here")
 		return nil, fmt.Errorf("out of bound")
 	}
 	return &sub, nil
