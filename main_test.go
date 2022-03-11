@@ -144,15 +144,39 @@ func Test_subtract(t *testing.T) {
 			want:  -30.0,
 		},
 		{
-			name:  "going beloew minFloat64",
-			input: "-40,20,-30",
-			want:  -30.0,
+			name:    "going below minimum Float64",
+			input:   fmt.Sprintf("-%v,%v", math.MaxFloat64, math.MaxFloat64),
+			wantErr: true,
+		},
+		{
+			name:    "Insert non numeric value",
+			input:   "!,7",
+			wantErr: true,
+		},
+		{
+			name:    "Insert non numeric value to subtract",
+			input:   "7,a",
+			wantErr: true,
+		},
+		{
+			name:    "passing float values as input",
+			input:   "1.9,4.2,-5",
+			want:    2.7,
+			wantErr: false,
+		},
+		{
+			name:  "should get zero subtracting a big number from itself",
+			input: fmt.Sprintf("%v,%v", math.MaxFloat64, math.MaxFloat64),
+			want:  0,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := subtract(tt.input)
 			assert.Equal(t, err != nil, tt.wantErr)
+			if err != nil {
+				fmt.Printf("Error: %s)", err.Error())
+			}
 			if err == nil {
 				fmt.Printf("Value of *got is %v\n", *got)
 				assert.Equal(t, tt.want, *got, "these should be equal")
