@@ -102,9 +102,21 @@ func Test_add(t *testing.T) {
 			wantErr: true,
 		},
 		{
+			name:    "passing exact max float values as input plus one 565",
+			input:   fmt.Sprintf("565,%v", math.MaxFloat64),
+			want:    math.MaxFloat64,
+			wantErr: false,
+		},
+		{
 			name:    "playing with boundaries",
 			input:   fmt.Sprintf("1,%v", math.MaxFloat64/100),
 			want:    math.MaxFloat64/100 + 1,
+			wantErr: false,
+		},
+		{
+			name:    "passing max float and 33 but wont do add operation",
+			input:   fmt.Sprintf("%v,33", math.MaxFloat64),
+			want:    37 + math.MaxFloat64,
 			wantErr: false,
 		},
 	}
@@ -169,6 +181,17 @@ func Test_subtract(t *testing.T) {
 			input: fmt.Sprintf("%v,%v", math.MaxFloat64, math.MaxFloat64),
 			want:  0,
 		},
+		{
+			name:  "should get less than zero subtracting a big number from itself and then 33",
+			input: fmt.Sprintf("%v,%v,33", math.MaxFloat64, math.MaxFloat64),
+			want:  0,
+		},
+		{
+			name:    "playing with boundaries",
+			input:   fmt.Sprintf("1,%v", math.MaxFloat64/100),
+			want:    1 - math.MaxFloat64/100,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -180,6 +203,80 @@ func Test_subtract(t *testing.T) {
 			if err == nil {
 				fmt.Printf("Value of *got is %v\n", *got)
 				assert.Equal(t, tt.want, *got, "these should be equal")
+			}
+		})
+	}
+}
+
+func Test_multiply(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		want    float64
+		wantErr bool
+	}{
+		{
+			name:    "simple good path with decimal fraction",
+			input:   "1,0.5",
+			want:    0.5,
+			wantErr: false,
+		},
+		{
+			name:    "simple good path",
+			input:   "1,2",
+			want:    2,
+			wantErr: false,
+		},
+		{
+			name:    "multiply by zero case",
+			input:   "0,3.5",
+			want:    0,
+			wantErr: false,
+		},
+		{
+			name:    "multiply by non digit case",
+			input:   "4,d",
+			wantErr: true,
+		},
+		{
+			name:    "i know we are still concerned about boundaries breakpoint",
+			input:   fmt.Sprintf("%v,1.0000000000000001", math.MaxFloat64),
+			want:    math.MaxFloat64,
+			wantErr: false,
+		},
+		{
+			name:    "i know we are still concerned about boundaries, finally!!!",
+			input:   fmt.Sprintf("%v,1.000000000000001", math.MaxFloat64),
+			wantErr: true,
+		},
+		{
+			name:    "i know we are still concerned about boundaries but not with 1",
+			input:   fmt.Sprintf("%v,1", math.MaxFloat64),
+			want:    math.MaxFloat64,
+			wantErr: false,
+		},
+		{
+			name:    "more than two digits",
+			input:   "4,3,2",
+			want:    24,
+			wantErr: false,
+		},
+		{
+			name:    "negative numbers",
+			input:   "4,-2",
+			want:    -8,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := multiply(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("multiply() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if (got != nil) && (*got != tt.want) {
+				t.Errorf("multiply() = %v, want %v", got, tt.want)
 			}
 		})
 	}
