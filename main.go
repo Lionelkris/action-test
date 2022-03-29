@@ -55,6 +55,30 @@ func subtract(input string) (*float64, error) {
 	return &sub, nil
 }
 
+func multiply(input string) (*float64, error) {
+	var number, product float64
+	var err error
+	product = 1
+	numbers := strings.Split(input, ",")
+	for _, numberString := range numbers {
+		if numberString == "" {
+			continue
+		}
+		if number, err = strconv.ParseFloat(numberString, 64); err != nil {
+			return nil, err
+		}
+		product = product * number
+		if product < math.MaxFloat64/10000 {
+			product = math.Round(product*10000) / 10000
+		}
+	}
+	if checkForInfinity(product) {
+		fmt.Println("error from here")
+		return nil, fmt.Errorf("out of bound")
+	}
+	return &product, nil
+}
+
 func checkForInfinity(number float64) bool {
 	return math.IsInf(number, 0)
 }
