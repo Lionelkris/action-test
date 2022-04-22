@@ -115,5 +115,6 @@ func main() {
 
 	greet := say_hello()
 	fmt.Println(greet)
+	calculator.server()
 
 }
