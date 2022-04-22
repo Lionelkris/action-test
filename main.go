@@ -79,6 +79,35 @@ func multiply(input string) (*float64, error) {
 	return &product, nil
 }
 
+func divide(input string) (*float64, error) {
+	var err error
+	var number, result float64
+	numbers := strings.SplitN(input, ",", 2)
+	if result, err = strconv.ParseFloat(numbers[0], 64); err != nil {
+		return nil, err
+	}
+	fmt.Println(numbers)
+	if len(numbers) == 1 {
+		return &result, nil
+	}
+	for _, numberString := range strings.Split(numbers[1], ",") {
+		if numberString == "" {
+			continue
+		}
+		if number, err = strconv.ParseFloat(numberString, 64); err != nil {
+			return nil, err
+		}
+		if number == 0 {
+			return nil, fmt.Errorf("don't divide by zero")
+		}
+		result = result / number
+	}
+	if checkForInfinity(result) {
+		return nil, fmt.Errorf("result out of boundary")
+	}
+	return &result, nil
+}
+
 func checkForInfinity(number float64) bool {
 	return math.IsInf(number, 0)
 }

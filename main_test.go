@@ -281,3 +281,75 @@ func Test_multiply(t *testing.T) {
 		})
 	}
 }
+
+func Test_divide(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		want    float64
+		wantErr bool
+	}{
+		{
+			name:  "simple int division",
+			input: "3,2",
+			want:  1.5,
+		},
+		{
+			name:  "simple int division whole number answer",
+			input: "10,2",
+			want:  5,
+		},
+		{
+			name:  "three number division",
+			input: "10,2,5",
+			want:  1,
+		},
+		{
+			name:  "single number input",
+			input: "10",
+			want:  10,
+		},
+		{
+			name:    "divide by zero",
+			input:   "10,0",
+			wantErr: true,
+		},
+		{
+			name:  "single number input trailing with a comma",
+			input: "10,",
+			want:  10,
+		},
+		{
+			name:  "multiple numbers with starting zero",
+			input: "0,10,5,8,4",
+			want:  0,
+		},
+		{
+			name:    "multiple numbers with a zero inbetween",
+			input:   "6,2,0,10,5,8,4",
+			wantErr: true,
+		},
+		{
+			name:    "divide numbers from less than 1",
+			input:   fmt.Sprintf("%v,0.05", math.MaxFloat64),
+			wantErr: true,
+		},
+		{
+			name:    "invalid input",
+			input:   "0,&",
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := divide(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("divide() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if (got != nil) && *got != tt.want {
+				t.Errorf("divide() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
