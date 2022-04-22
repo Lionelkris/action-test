@@ -1,6 +1,7 @@
 package main
 
 import (
+	"action-test/api"
 	"fmt"
 	"math"
 	"strconv"
@@ -115,6 +116,6 @@ func main() {
 
 	greet := say_hello()
 	fmt.Println(greet)
-	calculator.server()
+	api.Server()
 
 }
