@@ -1,4 +1,4 @@
-package main
+package calculator
 
 import (
 	"fmt"
@@ -7,26 +7,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 )
-
-func Test_say_hello(t *testing.T) {
-
-	tests := []struct {
-		name string
-		want string
-	}{
-		{
-			name: "simple test",
-			want: "Hello Hello",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := say_hello(); got != tt.want {
-				t.Errorf("say_hello() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
 
 func Test_add(t *testing.T) {
 	tests := []struct {
@@ -122,7 +102,7 @@ func Test_add(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := add(tt.input)
+			got, err := Add(tt.input)
 			if err == nil {
 				fmt.Printf("Value of *got is %v\n", *got)
 				assert.Equal(t, tt.want, *got, "these should be equal")
@@ -195,7 +175,7 @@ func Test_subtract(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := subtract(tt.input)
+			got, err := Subtract(tt.input)
 			assert.Equal(t, err != nil, tt.wantErr)
 			if err != nil {
 				fmt.Printf("Error: %s)", err.Error())
@@ -270,7 +250,7 @@ func Test_multiply(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := multiply(tt.input)
+			got, err := Multiply(tt.input)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("multiply() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -342,7 +322,7 @@ func Test_divide(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := divide(tt.input)
+			got, err := Divide(tt.input)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("divide() error = %v, wantErr %v", err, tt.wantErr)
 				return
